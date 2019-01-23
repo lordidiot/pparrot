@@ -52,6 +52,10 @@ if __name__ == "__main__":
 						metavar="TIME_INTVL",
 						help="Time interval for each animation frame (in seconds)")
 
+	parser.add_argument("-t", "--start-time",
+						metavar="START_TIME",
+						help="Time to start partying in the future (in epoch time)")
+
 	args = parser.parse_args()
 	error = lambda x : cprint("Error: {}!".format(x))
 
@@ -87,7 +91,15 @@ if __name__ == "__main__":
 	# handle time interval
 	frame_time = float(args.interval)
 	num_colors = len(colors)
+
+	# implement start_time
+	if args.start_time is not None:
+		while True:
+			if time() > int(args.start_time):
+				break
+			
 	
+	# animation loop
 	frame_cnt = 0
 	for frame in cycle(frames):
 		print chr(27) + "[2J"
