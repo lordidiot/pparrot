@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import socket
 import argparse
 from time import sleep, time
 from termcolor import colored, cprint
@@ -23,6 +24,10 @@ from itertools import cycle, izip
 ,dl,.'cooc:::,....,::coooooooooooc'.c:            
 cNo.................................oc            
 """
+
+def error(msg):
+	cprint("Error: {}!".format(msg))
+	exit(-1)
 
 def handle_color(frame):
 	global frame_cnt
@@ -56,8 +61,11 @@ if __name__ == "__main__":
 						metavar="START_TIME",
 						help="Time to start partying in the future (in epoch time)")
 
+	parser.add_argument("-r", "--remote",
+						metavar="HOST:PORT",
+						help="Connect to remote server to receive party time!")
+
 	args = parser.parse_args()
-	error = lambda x : cprint("Error: {}!".format(x))
 
 	frames = []
 	for i in xrange(10):
@@ -113,13 +121,28 @@ if __name__ == "__main__":
 	frame_time = float(args.interval)
 	num_colors = len(colors)
 
+	# implement remote master
+	if args.remote is not None:
+		host, port = args.remote.split(":")
+		port = int(port)
+		if host is None or port is None:
+			error("Something wrong with remote syntax {}".format(args.remote))
+
+		#print "Trying to connect to master parrot {}:{}".format(host, port)
+		sock = socket.create_connection((host, port))
+		sock.sendall("PARROT HELLO")
+		svr_msg = ""
+		while not svr_msg.endswith("!"):
+			svr_msg += sock.recv(32)
+		args.start_time = int(svr_msg.lstrip("LET'S PARTY AT ").rstrip("!"))
+		print "Got party time {}! Waiting to begin...".format(args.start_time)
+
 	# implement start_time
 	if args.start_time is not None:
 		while True:
 			if time() > int(args.start_time):
 				break
 			
-	
 	# animation loop
 	frame_cnt = 0
 	for frame in cycle(frames):
