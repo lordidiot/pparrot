@@ -42,7 +42,7 @@ if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description="PARTY OR DIE")
 	parser.add_argument("type",
 						metavar="TYPE",
-						help="Type of party parrot [normal, six]")
+						help="Type of party parrot [normal, two, two-oppo, three, six]")
 
 	parser.add_argument("color",
 						metavar="COLOR",
@@ -67,6 +67,27 @@ if __name__ == "__main__":
 	# handle parrot type
 	if args.type == "normal":
 		pass
+	elif args.type == "two":
+		for i in xrange(10):
+			newframe = ""
+			for line in frames[i].split('\n'):
+				newframe += '\t'+line+'\t'+line+'\n'
+			frames.append(newframe)
+		frames = frames[10:]
+	elif args.type == "two-oppo":
+		for i in xrange(10):
+			newframe = ""
+			for line in frames[i].split('\n'):
+				newframe += '\t'+line+'\t'+line[::-1]+'\n'
+			frames.append(newframe)
+		frames = frames[10:]
+	elif args.type == "three":
+		for i in xrange(10):
+			newframe = ""
+			for line in frames[i].split('\n'):
+				newframe += '\t'+line+'\t'+line+'\t'+line+'\n'
+			frames.append(newframe)
+		frames = frames[10:]
 	elif args.type == "six":
 		for i in xrange(10):
 			newframe = ""
