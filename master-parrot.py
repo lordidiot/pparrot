@@ -13,7 +13,7 @@ party_time = int(sys.argv[2])
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Bind the socket to the address given on the command line
-server_address = ("localhost", port)
+server_address = ("0.0.0.0", port)
 print >>sys.stderr, 'starting up on %s port %s' % server_address
 sock.bind(server_address)
 sock.listen(1)

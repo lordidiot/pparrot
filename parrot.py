@@ -132,9 +132,11 @@ if __name__ == "__main__":
 		print "[+] Trying to connect to master parrot {}:{} ...".format(host, port)
 		while sock == None:
 			try:
+				print "try once"
 				sock = socket.create_connection((host, port))
 			except:
-				pass
+				sleep(0.5)
+				print "dab"
 		print "[+] Connected !"
 		sock.sendall("PARROT HELLO")
 		svr_msg = ""
