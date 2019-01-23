@@ -102,8 +102,10 @@ if __name__ == "__main__":
 	# animation loop
 	frame_cnt = 0
 	for frame in cycle(frames):
+		frame_start = time()
 		print chr(27) + "[2J"
 		print handle_color(frame)
-		sleep(frame_time)
+		while frame_start+frame_time > time():
+			pass
 		frame_cnt += 1
 		frame_cnt %= num_colors
