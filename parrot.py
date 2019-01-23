@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
-import socket
-import argparse
+import socket 
+import argparse 
 from time import sleep, time
 from termcolor import colored, cprint
 from itertools import cycle, izip
@@ -128,14 +128,21 @@ if __name__ == "__main__":
 		if host is None or port is None:
 			error("Something wrong with remote syntax {}".format(args.remote))
 
-		#print "Trying to connect to master parrot {}:{}".format(host, port)
-		sock = socket.create_connection((host, port))
+		sock = None
+		print "[+] Trying to connect to master parrot {}:{} ...".format(host, port)
+		while sock == None:
+			try:
+				sock = socket.create_connection((host, port))
+			except:
+				pass
+		print "[+] Connected !"
 		sock.sendall("PARROT HELLO")
 		svr_msg = ""
 		while not svr_msg.endswith("!"):
 			svr_msg += sock.recv(32)
 		args.start_time = int(svr_msg.lstrip("LET'S PARTY AT ").rstrip("!"))
 		print "Got party time {}! Waiting to begin...".format(args.start_time)
+		sock.close()
 
 	# implement start_time
 	if args.start_time is not None:
